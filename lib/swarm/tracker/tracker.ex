@@ -1339,7 +1339,7 @@ defmodule Swarm.Tracker do
 
   defp ensure_swarm_started_on_remote_node(state, node, attempts \\ 0)
   defp ensure_swarm_started_on_remote_node(%TrackerState{nodes: nodes, strategy: strategy} = state, node, attempts) when attempts <= @retry_max_attempts do
-    case :rpc.call(node, :application, :which_applications, []) do
+    case :rpc.call(node, :application, :which_applications, [], @retry_interval) do
       app_list when is_list(app_list) ->
         case List.keyfind(app_list, :swarm, 0) do
           {:swarm, _, _} ->
